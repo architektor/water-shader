@@ -1,0 +1,56 @@
+[gd_scene load_steps=8 format=3 uid="uid://bwmfvki1332pu"]
+
+[ext_resource type="Texture2D" uid="uid://b341t7la4lbvo" path="res://icon.svg" id="2_s2t4e"]
+[ext_resource type="Shader" path="res://water.gdshader" id="3_2rr8w"]
+[ext_resource type="Script" path="res://water.gd" id="5_lv6dx"]
+[ext_resource type="PackedScene" uid="uid://cthm4aaw2ohrv" path="res://character_body_2d.tscn" id="6_q7q7c"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_3jjp1"]
+noise_type = 3
+seed = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1dsb8"]
+seamless = true
+noise = SubResource("FastNoiseLite_3jjp1")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mjnvb"]
+shader = ExtResource("3_2rr8w")
+shader_parameter/scale = Vector2(16.4531, 5.49219)
+shader_parameter/y_zoom = 1.0
+shader_parameter/water_color = Color(0, 0.129, 0.522, 0.5)
+shader_parameter/distortion_scale = Vector2(0.05, 0.408)
+shader_parameter/intensity = 0.07
+shader_parameter/speed = 0.085
+shader_parameter/wave_amplitude = 0.038
+shader_parameter/wave_speed = 4.0
+shader_parameter/wave_period = 0.45
+shader_parameter/noise = SubResource("NoiseTexture2D_1dsb8")
+
+[node name="World" type="Node2D"]
+
+[node name="Icon0" type="Sprite2D" parent="."]
+position = Vector2(368, 328)
+scale = Vector2(3.3125, 3.14062)
+texture = ExtResource("2_s2t4e")
+
+[node name="Icon1" type="Sprite2D" parent="."]
+position = Vector2(608, 295)
+texture = ExtResource("2_s2t4e")
+
+[node name="Icon2" type="Sprite2D" parent="."]
+position = Vector2(992, 173)
+scale = Vector2(4.59375, 5.29688)
+texture = ExtResource("2_s2t4e")
+
+[node name="CharacterBody2D" parent="." instance=ExtResource("6_q7q7c")]
+position = Vector2(1539, 240)
+
+[node name="Water" type="Sprite2D" parent="."]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_mjnvb")
+position = Vector2(1071, 704)
+scale = Vector2(16.4531, 5.49219)
+texture = ExtResource("2_s2t4e")
+script = ExtResource("5_lv6dx")
+
+[connection signal="item_rect_changed" from="Water" to="Water" method="_on_item_rect_changed"]
